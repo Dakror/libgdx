@@ -25,8 +25,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-/** A group that lays out its children top to bottom vertically, with optional wrapping. This can be easier than using
- * {@link Table} when actors need to be inserted into or removed from the middle of the group.
+/** A group that lays out its children top to bottom vertically, with optional wrapping. {@link #getChildren()} can be sorted to
+ * change the order of the actors (eg {@link Actor#setZIndex(int)}). This can be easier than using {@link Table} when actors need
+ * to be inserted into or removed from the middle of the group. {@link #invalidate()} must be called after changing the children
+ * order.
  * <p>
  * The preferred width is the largest preferred width of any child. The preferred height is the sum of the children's preferred
  * heights plus spacing. The preferred size is slightly different when {@link #wrap() wrap} is enabled. The min size is the
@@ -494,8 +496,9 @@ public class VerticalGroup extends WidgetGroup {
 		return wrap;
 	}
 
-	/** Sets the alignment of widgets within each column of the vertical group. Set to {@link Align#center}, {@link Align#left}, or
-	 * {@link Align#right}. */
+	/** Sets the vertical alignment of each column of widgets when {@link #wrap() wrapping} is enabled and sets the horizontal
+	 * alignment of widgets within each column. Set to {@link Align#center}, {@link Align#top}, {@link Align#bottom},
+	 * {@link Align#left}, {@link Align#right}, or any combination of those. */
 	public VerticalGroup columnAlign (int columnAlign) {
 		this.columnAlign = columnAlign;
 		return this;
@@ -507,10 +510,26 @@ public class VerticalGroup extends WidgetGroup {
 		return this;
 	}
 
+	/** Adds {@link Align#top} and clears {@link Align#bottom} for the alignment of each column of widgets when {@link #wrap()
+	 * wrapping} is enabled. */
+	public VerticalGroup columnTop () {
+		columnAlign |= Align.top;
+		columnAlign &= ~Align.bottom;
+		return this;
+	}
+
 	/** Adds {@link Align#left} and clears {@link Align#right} for the alignment of widgets within each column. */
 	public VerticalGroup columnLeft () {
 		columnAlign |= Align.left;
 		columnAlign &= ~Align.right;
+		return this;
+	}
+
+	/** Adds {@link Align#bottom} and clears {@link Align#top} for the alignment of each column of widgets when {@link #wrap()
+	 * wrapping} is enabled. */
+	public VerticalGroup columnBottom () {
+		columnAlign |= Align.bottom;
+		columnAlign &= ~Align.top;
 		return this;
 	}
 

@@ -19,13 +19,14 @@ apply from: "gradle/dependencies.gradle"
 
 allprojects {
     group = 'com.badlogicgames.gdx'
-    version = '1.9.5-SNAPSHOT'
+    version = '1.9.9-SNAPSHOT'
 
     buildscript {
         repositories {
             mavenCentral()
             jcenter()
             maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+            google()
         }
     }
 
@@ -43,13 +44,6 @@ configure(subprojects - project(":tests:gdx-tests-android")) {
     compileJava {
         options.fork = true
         options.incremental = true
-    }
-
-    idea {
-        module {
-            scopes.PROVIDED.minus += [configurations.compile]
-            scopes.COMPILE.plus += [configurations.compile]
-        }
     }
 }
 
